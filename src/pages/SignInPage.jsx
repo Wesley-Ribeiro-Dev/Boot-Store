@@ -6,7 +6,6 @@ import { styled } from 'styled-components';
 import logo from "../assets/TestaLogo.png"
 
 
-
 export default function SignInPage() {
 
   const { setToken, token } = useContext(UserDataContext);
@@ -28,7 +27,7 @@ export default function SignInPage() {
     }
   }, [])
 
-  function subimit() {
+  function subimitForm() {
     axios.post(`http://localhost:5000/`, login).then((user) => {
       navigate("/home");
       setToken(user.data);
@@ -53,7 +52,7 @@ export default function SignInPage() {
 
       <Form onSubmit={event => {
         event.preventDefault();
-        subimit()
+        subimitForm()
       }}>
         <input data-test="email" required onChange={handleChange} value={login.email} name="email" placeholder="E-mail" type="email" />
         <input data-test="password" required onChange={handleChange} value={login.password} name="password" placeholder="Senha" type="password" />
