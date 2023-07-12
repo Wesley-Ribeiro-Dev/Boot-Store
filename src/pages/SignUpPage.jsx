@@ -22,6 +22,23 @@ export default function SignUpPage() {
     setRegister(newRegister);
   }
 
+  function subimitForm() {
+    const { name, email, password, confirmPassword } = register;
+
+    if (password !== confirmPassword) {
+      alert("As senhas são diferentes");
+      return
+    }
+
+    const user = { name, email, password }
+
+    axios.post(`http://localhost:5000/register`, user).then(() => navigate("/")).catch(error => {
+      const erro = (error.response.status);
+      if (erro === 422) return alert("Os dados são inválidos tente novamente");
+      if (erro === 409) return alert("Esse email já esta em uso");
+    });
+  }
+
   return (
     <>
       <Head>
@@ -34,21 +51,7 @@ export default function SignUpPage() {
 
       <Form onSubmit={event => {
         event.preventDefault();
-        const { name, email, password, confirmPassword } = register;
-
-        if (password !== confirmPassword) {
-          alert("As senhas são diferentes");
-          return
-        }
-
-        const user = { name, email, password }
-
-        axios.post(`http://localhost:5000/register`, user).then(() => navigate("/")).catch(error => {
-          const erro = (error.response.status);
-          if (erro === 422) return alert("Os dados são inválidos tente novamente");
-          if (erro === 409) return alert("Esse email já esta em uso");
-        });
-
+        subimitForm();
       }}>
         <input required onChange={handleChange} value={register.name} name="name" placeholder="Nome" type="text" />
         <input required onChange={handleChange} value={register.email} name="email" placeholder="E-mail" type="email" />
