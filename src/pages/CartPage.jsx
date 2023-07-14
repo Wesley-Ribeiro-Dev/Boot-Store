@@ -8,6 +8,12 @@ export default function CartPage() {
 			<CartContainer>
 				<CartItens>
 					<h1>Seu Carrinho</h1>
+					<p>
+						TOTAL (X produtos) <span className="bold">R$XXX,XX</span>
+					</p>
+                    <Item />
+                    <Item />
+
 				</CartItens>
 				<CartPayment />
 			</CartContainer>
@@ -25,11 +31,32 @@ const CartContainer = styled.div`
 const CartItens = styled.div`
 	display: flex;
 	flex-direction: column;
-	width: 800px;
+	width: 700px;
 	h1 {
 		font-family: "Bebas Neue", sans-serif;
-		font-size: 36px;
+		font-size: 48px;
+		margin-bottom: 18px;
 	}
+	p {
+		font-family: "Rubik", sans-serif;
+		font-size: 16px;
+		font-weight: 400;
+		margin-bottom: 30px;
+	}
+	.bold {
+		font-weight: 700;
+	}
+`;
+
+const Item = styled.div`
+	height: 200px;
+	width: 600px;
+	display: flex;
+	margin-bottom: 30px;
+    border: 1px solid gray;
+    img{
+        width: 200px;
+    }
 `;
 const CartPayment = styled.div`
 	width: 300px;
