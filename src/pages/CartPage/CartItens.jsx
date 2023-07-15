@@ -76,7 +76,6 @@ const ItemDiv = styled.div`
 
 const ItemInfo = styled.div`
 	font-family: "Rubik", sans-serif;
-
 	font-weight: 400;
 	display: flex;
 	flex-direction: column;

@@ -1,6 +1,7 @@
 import { styled } from "styled-components";
 import Header from "../../components/Header";
 import CartItens from "./CartItens";
+import CartPayment from "./CartPayment";
 
 export default function CartPage() {
 	return (
@@ -16,13 +17,7 @@ export default function CartPage() {
 
 const CartContainer = styled.div`
 	display: flex;
-	justify-content: space-around;
+	justify-content: space-evenly;
 	height: 800px;
 	margin-top: 80px;
-`;
-
-const CartPayment = styled.div`
-	width: 300px;
-	height: 600px;
-	background-color: red;
 `;
