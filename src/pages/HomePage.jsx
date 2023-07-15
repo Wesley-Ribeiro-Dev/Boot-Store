@@ -4,36 +4,44 @@ import { useState, useContext, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { UserDataContext } from "../context/UserDataContext";
+import axios from 'axios';
 
-const products = [
-  {name: "Tenis 1", price :  "150", image:"https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/f598723ec37e440f872ead1d017eb2fb_9366/tenis-racer-tr21.jpg"},
-  {name: "Tenis 2", price :  "250", image:"https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/af300599403b4938a8cbaf0e0115fc21_9366/tenis-alphaboost-v1.jpg"},
-  {name: "Tenis 3", price :  "350", image:"https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/25ca905daa6d4bee8cd4af8f00775b04_9366/tenis-runfalcon-3.jpg"},
-  {name: "Tenis 4", price :  "450", image:"https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/8a358bcd5e3d453da815aad6009a249e_9366/tenis-superstar.jpg"}
+const productsMock = [
+  {id: 1, name: "Tenis 1", price :  "150", image:"https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/f598723ec37e440f872ead1d017eb2fb_9366/tenis-racer-tr21.jpg"},
+  {id: 2, name: "Tenis 2", price :  "250", image:"https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/af300599403b4938a8cbaf0e0115fc21_9366/tenis-alphaboost-v1.jpg"},
+  {id: 3, name: "Tenis 3", price :  "350", image:"https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/25ca905daa6d4bee8cd4af8f00775b04_9366/tenis-runfalcon-3.jpg"},
+  {id: 4, name: "Tenis 4", price :  "450", image:"https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/8a358bcd5e3d453da815aad6009a249e_9366/tenis-superstar.jpg"}
 ];
 
 export default function HomePage() {
-  //const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([]);
 
   const url = `http://localhost:5000`;
 
-  // useEffect(() => {
-  //   const request = axios.get(`${url}/home`);
+  useEffect(() => {
+    const request = axios.get(`${url}/home`);
 
-  //   request.then(r => {
-  //     setProducts(r.data);
-  //   });
+    request.then(r => {
+      setProducts(r.data);
+    });
 
-  //   request.catch(r => {
-  //     alert(r.response.data);
-  //   });
-  // }, []);
+    request.catch(r => {
+      alert(r.response.data);
+    });
+  }, []);
 
-  function addToCart(){
+  function addToCart(p){
     let conf = confirm("Deseja adicionar o item ao carrinho?");
 
     if(conf){
-      alert("Adicionado ao carrinho!");
+      const promise = axios.post(`${url}/home`, p);
+
+      promise.then(r => {
+        alert("Adicionado ao carrinho!");
+      });
+      promise.catch(r => {
+        alert(r.response.data);
+      });
     }
   };
 
@@ -43,7 +51,7 @@ export default function HomePage() {
       <HomeContainer>
         <ProductsContainer>
           {products.map(p => (
-            <Product onClick={addToCart}>
+            <Product key={p.id} onClick={() => addToCart(p)}>
               <img src={p.image}></img>
               <ProductInfo>
                 <h1>{p.name}</h1>
