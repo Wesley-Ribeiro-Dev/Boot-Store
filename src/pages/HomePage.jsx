@@ -3,7 +3,7 @@ import Header from '../components/Header'
 import { useState, useContext, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
-import { UserDataContext } from "../context/UserDataContext";
+import { UserDataContext } from "../contexts/UserDataContext";
 import axios from 'axios';
 
 const productsMock = [
@@ -12,11 +12,11 @@ const productsMock = [
   {id: 3, name: "Tenis 3", price :  "350", image:"https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/25ca905daa6d4bee8cd4af8f00775b04_9366/tenis-runfalcon-3.jpg"},
   {id: 4, name: "Tenis 4", price :  "450", image:"https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/8a358bcd5e3d453da815aad6009a249e_9366/tenis-superstar.jpg"}
 ];
-
+const VITE_API_URL = import.meta.env.VITE_API_URL;
 export default function HomePage() {
   const [products, setProducts] = useState([]);
 
-  const url = `http://localhost:5000`;
+  const url = `${VITE_API_URL}`;
 
   useEffect(() => {
     const request = axios.get(`${url}/home`);

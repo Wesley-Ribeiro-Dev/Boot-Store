@@ -8,7 +8,7 @@ import logo from "../assets/TestaLogo.png"
 export default function SignUpPage() {
 
   const navigate = useNavigate();
-
+  const VITE_API_URL = import.meta.env.VITE_API_URL;
   const [register, setRegister] = useState({
     name: "",
     email: "",
@@ -32,7 +32,7 @@ export default function SignUpPage() {
 
     const user = { name, email, password }
 
-    axios.post(`http://localhost:5000/register`, user).then(() => navigate("/")).catch(error => {
+    axios.post(`${VITE_API_URL}/register`, user).then(() => navigate("/")).catch(error => {
       const erro = (error.response.status);
       if (erro === 422) return alert("Os dados são inválidos tente novamente");
       if (erro === 409) return alert("Esse email já esta em uso");
