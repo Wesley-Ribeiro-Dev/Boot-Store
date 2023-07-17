@@ -20,7 +20,7 @@ function updateList(setItemList, setTotalPrice, setTotalQuantity) {
 			setTotalQuantity(auxForQuantity);
 		})
 		.catch((res) => {
-			alert(res.response.data);
+			alert(res);
 		});
 }
 
@@ -47,7 +47,7 @@ export default function CartItens({
 			<ItensContainer>
 				<h1>Seu Carrinho</h1>
 				<p>
-					TOTAL ({totalQuantity} produtos){" " }
+					TOTAL ({totalQuantity} produtos){" "}
 					<span className="bold">
 						R${totalPrice.toFixed(2).replace(".", ",")}
 					</span>
@@ -135,7 +135,15 @@ function Item({
 				<p>R${(quantityShown * price).toFixed(2).replace(".", ",")}</p>
 			</Price>
 			<Cancel>
-				<img src={xis} alt="cancelar" />
+				<img
+					src={xis}
+					alt="cancelar"
+					onClick={() => {
+						axios.delete(`http://localhost:5000/cart/${_id}`);
+						console.log("p");
+						updateList(setItemList, setTotalPrice, setTotalQuantity);
+					}}
+				/>
 			</Cancel>
 		</ItemDiv>
 	);
