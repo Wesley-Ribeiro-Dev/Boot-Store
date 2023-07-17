@@ -32,9 +32,10 @@ export default function HomePage() {
 
   function addToCart(p){
     let conf = confirm("Deseja adicionar o item ao carrinho?");
+    let prod = {...p, quantity: "1"};
 
     if(conf){
-      const promise = axios.post(`${url}/home`, p);
+      const promise = axios.post(`${url}/home`, prod);
 
       promise.then(r => {
         alert("Adicionado ao carrinho!");
