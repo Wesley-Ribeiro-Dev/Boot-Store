@@ -4,7 +4,7 @@ import logo from "../assets/TestaLogo.png";
 import carrinho from "../assets/cart-outline.svg";
 import logoutIcon from "../assets/log-out-outline.svg";
 import { useEffect, useContext } from "react";
-import { UserDataContext } from "../context/UserDataContext";
+import { UserDataContext } from "../contexts/UserDataContext";
 
 export default function Header() {
 	const navigate = useNavigate();

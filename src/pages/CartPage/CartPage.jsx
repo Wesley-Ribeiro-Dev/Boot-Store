@@ -2,12 +2,10 @@ import { styled } from "styled-components";
 import Header from "../../components/Header";
 import CartItens from "./CartItens";
 import CartPayment from "./CartPayment";
-import { useState } from "react";
+import useOrder from "../../hooks/useOrder";
 
 export default function CartPage() {
-	const [itemList, setItemList] = useState([]);
-	const [totalPrice, setTotalPrice] = useState(0);
-	const [totalQuantity, setTotalQuantity] = useState(0);
+	const { itemList, setItemList, totalPrice, setTotalPrice, totalQuantity, setTotalQuantity} = useOrder();
 
 	return (
 		<>

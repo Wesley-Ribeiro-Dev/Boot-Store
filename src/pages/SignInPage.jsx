@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { UserDataContext } from "../context/UserDataContext";
+import { UserDataContext } from "../contexts/UserDataContext";
 import { styled } from 'styled-components';
 import logo from "../assets/TestaLogo.png"
 
@@ -9,6 +9,7 @@ import logo from "../assets/TestaLogo.png"
 export default function SignInPage() {
 
   const { setToken, token } = useContext(UserDataContext);
+  const VITE_API_URL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const [login, setLogin] = useState({
     email: "",
@@ -28,7 +29,7 @@ export default function SignInPage() {
   }, [])
 
   function subimitForm() {
-    axios.post(`http://localhost:5000/`, login).then((user) => {
+    axios.post(`${VITE_API_URL}/`, login).then((user) => {
       navigate("/home");
       setToken(user.data);
       localStorage.setItem("token", user.data);

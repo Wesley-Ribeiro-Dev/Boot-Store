@@ -1,52 +1,59 @@
 import { styled } from "styled-components";
-import arrow from "../../assets/iconmonstr-arrow-16.png";
-import { Link } from "react-router-dom";
-import useOrder from "../../hooks/useOrder";
 
-export default function CartPayment() {
-  const { itemList, totalPrice } = useOrder();
-  return (
-    <CartPaymentContainer>
-      <Link to={"/checkout"}>
-        <PayButtonShadow>
-          <PayButton>
-            <h1>F I N A L I Z A R</h1>
-            <img src={arrow} alt="proximo" />
-          </PayButton>
-        </PayButtonShadow>
-      </Link>
+const PageContainer = styled.div`
+  display: flex;
+  /* background-color: red; */
+  padding-left: 15px;
+  gap: 70px;
+  justify-content: center;
+  margin-top: 30px;
+  h1 {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 40px;
+  }
+  h2 {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 30px;
+  }
+`;
 
-      <OrderInfo>
-        <h1>Resumo do Pedido</h1>
-        {itemList.map((item) => {
-          return (
-            <div className="priceLine" key={item._id}>
-              <p>
-                {item.quantity}x {item.name}
-              </p>
-              <p>
-                R${(item.quantity * item.price).toFixed(2).replace(".", ",")}
-              </p>
-            </div>
-          );
-        })}
+const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  /* background-color: yellow; */
+`;
 
-        <div className="priceLine">
-          <p>Entrega</p>
-          <p>Grátis</p>
-        </div>
-        <div className="priceLine">
-          <h2>Total</h2>
-          <h2>R${totalPrice.toFixed(2).replace(".", ",")}</h2>
-        </div>
-        <div className="bottomLine" />
-      </OrderInfo>
-    </CartPaymentContainer>
-  );
-}
+const FormContainer = styled.form`
+  display: flex;
+  flex-direction: column;
+  /* background-color: blue; */
+  gap: 30px;
+`;
 
-const CartPaymentContainer = styled.div`
-  width: 400px;
+const OrderSummaryContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+const OrderDetailsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  overflow-y: auto;
+`;
+
+const CardsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  overflow-y: auto;
+  max-height: 402px;
+`;
+
+const PaymentMethodsContainer = styled.div`
+  display: flex;
+  gap: 30px;
+  flex-direction: column;
 `;
 
 const PayButton = styled.button`
@@ -109,6 +116,8 @@ const OrderInfo = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+  min-width: 350px;
+  margin-top: 10px;
 
   h1 {
     font-family: "Bebas Neue", sans-serif;
@@ -138,11 +147,25 @@ const OrderInfo = styled.div`
     font-weight: 400;
     color: gray;
   }
+`;
 
-  .bottomLine {
-    height: 1px;
-    background-color: lightgray;
-  }
+const BottomLine = styled.div`
+  height: 1px;
+  background-color: lightgray;
 `;
 
 function PriceLine(name, quantity, price) {}
+
+export {
+  PageContainer,
+  FormContainer,
+  Column,
+  PayButton,
+  PayButtonShadow,
+  OrderInfo,
+  OrderDetailsContainer,
+  OrderSummaryContainer,
+  CardsWrapper,
+  PaymentMethodsContainer,
+  BottomLine
+};
