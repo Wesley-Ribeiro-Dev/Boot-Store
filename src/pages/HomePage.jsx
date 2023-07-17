@@ -43,7 +43,6 @@ export default function HomePage() {
 
   useEffect(() => {
     const request = axios.get(`${VITE_API_URL}/home`);
-
     request.then((r) => {
       setProducts(r.data);
     });
@@ -58,8 +57,7 @@ export default function HomePage() {
     let prod = { ...p, quantity: "1" };
 
     if (conf) {
-      const promise = axios.post(`${VITE_API_URL}/home`, prod);
-
+      const promise = axios.post(`${VITE_API_URL}/home`, prod)
       promise.then((r) => {
         alert("Adicionado ao carrinho!");
       });
@@ -71,7 +69,6 @@ export default function HomePage() {
 
   return (
     <>
-      <Header />
       <HomeContainer>
         <ProductsContainer>
           {products.map((p) => (

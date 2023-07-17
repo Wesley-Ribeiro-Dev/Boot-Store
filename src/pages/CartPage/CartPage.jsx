@@ -1,5 +1,4 @@
 import { styled } from "styled-components";
-import Header from "../../components/Header";
 import CartItens from "./CartItens";
 import CartPayment from "./CartPayment";
 import useOrder from "../../hooks/useOrder";
@@ -9,7 +8,6 @@ export default function CartPage() {
 
 	return (
 		<>
-			<Header />
 			<CartContainer>
 				<CartItens
 					itemList={itemList}

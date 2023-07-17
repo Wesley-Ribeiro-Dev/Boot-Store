@@ -1,10 +1,6 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import arrow from "../../assets/iconmonstr-arrow-16.png";
-import {
-  Input,
-  Select,
-  StyledRow,
-} from "../../components/FormComponents";
+import { Input, Select, StyledRow } from "../../components/FormComponents";
 import {
   BottomLine,
   CardsWrapper,
@@ -19,15 +15,15 @@ import {
 } from "./styled";
 import { useNavigate } from "react-router";
 import useOrder from "../../hooks/useOrder";
-import Header from "../../components/Header";
 import ProductCard from "../../components/ProductCard";
 import { UserDataContext } from "../../contexts/UserDataContext";
 import api from "../../services/api";
+import axios from "axios";
 
 export default function CheckoutPage() {
-  const { itemList, totalPrice } = useOrder();
-  const {token} = useContext(UserDataContext);
-
+  const { itemList, setItemList, setTotalPrice, totalPrice, setTotalQuantity } =
+    useOrder();
+  const { token } = useContext(UserDataContext);
   const brazilStates = [
     "Acre",
     "Alagoas",
@@ -57,43 +53,9 @@ export default function CheckoutPage() {
     "Sergipe",
     "Tocantins",
   ];
-  const paymentOptions = [
-    "Crédito / Débito",
-    "Boleto",
-    "Pix"
-  ]
-  const productsMock = [
-    {
-      id: 1,
-      name: "Tenis 1",
-      price: "150",
-      image:
-        "https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/f598723ec37e440f872ead1d017eb2fb_9366/tenis-racer-tr21.jpg",
-    },
-    {
-      id: 2,
-      name: "Tenis 2",
-      price: "250",
-      image:
-        "https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/af300599403b4938a8cbaf0e0115fc21_9366/tenis-alphaboost-v1.jpg",
-    },
-    {
-      id: 3,
-      name: "Tenis 3",
-      price: "350",
-      image:
-        "https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/25ca905daa6d4bee8cd4af8f00775b04_9366/tenis-runfalcon-3.jpg",
-    },
-    {
-      id: 4,
-      name: "Tenis 4",
-      price: "450",
-      image:
-        "https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/8a358bcd5e3d453da815aad6009a249e_9366/tenis-superstar.jpg",
-    },
-  ];
+  const paymentOptions = ["Crédito / Débito", "Boleto", "Pix"];
   const navigate = useNavigate();
-  const [paymentMethod, setPaymentMethod] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("Crédito / Débito");
   const [deliveryFormData, setDeliveryFormData] = useState({
     name: "",
     surName: "",
@@ -109,7 +71,28 @@ export default function CheckoutPage() {
     phone: "",
     cpf: "",
   });
-  const [isLoading, setIsLoading] = useState(false);
+  const VITE_API_URL = import.meta.env.VITE_API_URL;
+  
+
+  useEffect(() => {
+    axios
+      .get(`${VITE_API_URL}/cart`)
+      .then((res) => {
+        setItemList(res.data);
+        if (res.data.length === 0) navigate("/home");
+        let auxForTotal = 0;
+        let auxForQuantity = 0;
+        res.data.forEach((item) => {
+          auxForTotal += item.quantity * item.price;
+          auxForQuantity += Number(item.quantity);
+        });
+        setTotalPrice(auxForTotal);
+        setTotalQuantity(auxForQuantity);
+      })
+      .catch((res) => {
+        alert(res);
+      });
+  }, []);
 
   function handleDeliveryForm(e) {
     setDeliveryFormData({
@@ -130,20 +113,20 @@ export default function CheckoutPage() {
 
     const order = {
       paymentMethod,
-      value: 400,
-      products: productsMock
-    }
+      value: totalPrice,
+      products: itemList,
+    };
 
     const body = {
       delivery: deliveryFormData,
       contact: contactInfoFormData,
-      order
+      order,
     };
 
     const promise = api.saveOrder(body, token);
 
     promise.then(() => {
-      alert("Pedido criado com sucesso!")
+      alert("Pedido criado com sucesso!");
       navigate("/home");
     });
     promise.catch((res) => {
@@ -153,7 +136,6 @@ export default function CheckoutPage() {
 
   return (
     <>
-      <Header />
       <PageContainer>
         <Column>
           <FormContainer>
@@ -272,25 +254,25 @@ export default function CheckoutPage() {
           <PaymentMethodsContainer>
             <h1>Método de pagamento</h1>
             <Select
-                name="paymentMethod"
-                onChange={(e) => setPaymentMethod(e.target.value)}
-                required
-                value={paymentMethod}
-              >
-                {paymentOptions.map((method) => (
-                  <option value={method} key={method}>
-                    {method}
-                  </option>
-                ))}
-              </Select>
+              name="paymentMethod"
+              onChange={(e) => setPaymentMethod(e.target.value)}
+              required
+              value={paymentMethod}
+            >
+              {paymentOptions.map((method) => (
+                <option value={method} key={method}>
+                  {method}
+                </option>
+              ))}
+            </Select>
           </PaymentMethodsContainer>
         </Column>
         <Column>
           <OrderInfo>
             <h1>Resumo do Pedido</h1>
-            {itemList.map((item) => {
+            {itemList.map((item, index) => {
               return (
-                <div className="priceLine" key={item._id}>
+                <div className="priceLine" key={index}>
                   <p>
                     {item.quantity}x {item.name}
                   </p>
@@ -315,8 +297,8 @@ export default function CheckoutPage() {
           <OrderDetailsContainer>
             <h2>Detalhes do pedido</h2>
             <CardsWrapper>
-              {itemList.map((item) => (
-                <ProductCard item={item} key={item.id} />
+              {itemList.map((item, index) => (
+                <ProductCard item={item} key={index} />
               ))}
             </CardsWrapper>
             <BottomLine></BottomLine>

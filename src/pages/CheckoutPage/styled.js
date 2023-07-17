@@ -7,6 +7,7 @@ const PageContainer = styled.div`
   gap: 70px;
   justify-content: center;
   margin-top: 30px;
+  padding-bottom: 20px;
   h1 {
     font-family: "Bebas Neue", sans-serif;
     font-size: 40px;
