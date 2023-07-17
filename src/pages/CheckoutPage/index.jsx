@@ -143,6 +143,7 @@ export default function CheckoutPage() {
     const promise = api.saveOrder(body, token);
 
     promise.then(() => {
+      alert("Pedido criado com sucesso!")
       navigate("/home");
     });
     promise.catch((res) => {
