@@ -287,7 +287,7 @@ export default function CheckoutPage() {
         <Column>
           <OrderInfo>
             <h1>Resumo do Pedido</h1>
-            {productsMock.map((item) => {
+            {itemList.map((item) => {
               return (
                 <div className="priceLine" key={item._id}>
                   <p>
@@ -314,7 +314,7 @@ export default function CheckoutPage() {
           <OrderDetailsContainer>
             <h2>Detalhes do pedido</h2>
             <CardsWrapper>
-              {productsMock.map((item) => (
+              {itemList.map((item) => (
                 <ProductCard item={item} key={item.id} />
               ))}
             </CardsWrapper>

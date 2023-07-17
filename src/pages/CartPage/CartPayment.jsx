@@ -7,7 +7,7 @@ export default function CartPayment() {
   const { itemList, totalPrice } = useOrder();
   return (
     <CartPaymentContainer>
-      <Link to={"/delivery"}>
+      <Link to={"/checkout"}>
         <PayButtonShadow>
           <PayButton>
             <h1>F I N A L I Z A R</h1>

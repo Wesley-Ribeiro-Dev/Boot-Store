@@ -7,7 +7,7 @@ const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 function updateList(setItemList, setTotalPrice, setTotalQuantity) {
 	axios
-		.get(`${VITE_API_URL}cart`)
+		.get(`${VITE_API_URL}/cart`)
 		.then((res) => {
 			setItemList(res.data);
 
@@ -112,7 +112,7 @@ function Item({
 				<select
 					value={quantityShown}
 					onChange={(e) => {
-						axios.put(`http://localhost:5000/cart/${_id}`, {
+						axios.put(`${VITE_API_URL}/cart/${_id}`, {
 							quantity: e.target.value,
 						});
 
@@ -140,7 +140,7 @@ function Item({
 					src={xis}
 					alt="cancelar"
 					onClick={() => {
-						axios.delete(`http://localhost:5000/cart/${_id}`);
+						axios.delete(`${VITE_API_URL}/cart/${_id}`);
 						console.log("p");
 						updateList(setItemList, setTotalPrice, setTotalQuantity);
 					}}
