@@ -1,28 +1,46 @@
 import { styled } from "styled-components";
 import arrow from "../../assets/iconmonstr-arrow-16.png";
+import axios from "axios";
 
-export default function CartPayment() {
+export default function CartPayment({ itemList, totalPrice }) {
 	return (
 		<CartPaymentContainer>
 			<PayButtonShadow>
-				<PayButton>
+				<PayButton
+					onClick={() => {
+						if (confirm("Deseja concluir a compra?")) {
+							axios.delete("http://localhost:5000/cart");
+							alert("Seu pedido foi ignorado e deletado com sucesso!");
+							location.reload();
+						}
+					}}
+				>
 					<h1>F I N A L I Z A R</h1>
 					<img src={arrow} alt="proximo" />
 				</PayButton>
 			</PayButtonShadow>
 			<OrderInfo>
 				<h1>Resumo do Pedido</h1>
-				<div className="priceLine">
-					<p>2 Produtos</p>
-					<p>R$ 1222,00</p>
-				</div>
+				{itemList.map((item) => {
+					return (
+						<div className="priceLine" key={item._id}>
+							<p>
+								{item.quantity}x {item.name}
+							</p>
+							<p>
+								R${(item.quantity * item.price).toFixed(2).replace(".", ",")}
+							</p>
+						</div>
+					);
+				})}
+
 				<div className="priceLine">
 					<p>Entrega</p>
-					<p>GRÁTIS</p>
+					<p>Grátis</p>
 				</div>
 				<div className="priceLine">
 					<h2>Total</h2>
-					<h2>R$ 1222,00</h2>
+					<h2>R${totalPrice.toFixed(2).replace(".", ",")}</h2>
 				</div>
 				<div className="bottomLine" />
 			</OrderInfo>
@@ -129,3 +147,5 @@ const OrderInfo = styled.div`
 		background-color: lightgray;
 	}
 `;
+
+function PriceLine(name, quantity, price) {}

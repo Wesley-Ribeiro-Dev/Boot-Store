@@ -1,17 +1,74 @@
 import { styled } from "styled-components";
 import xis from "../../assets/cross-svgrepo-com.svg";
+import { useEffect } from "react";
+import { useState } from "react";
+import axios from "axios";
 
-export default function CartItens({}) {
-	return (
-		<ItensContainer>
-			<h1>Seu Carrinho</h1>
-			<p>
-				TOTAL (X produtos) <span className="bold">R$XXX,XX</span>
-			</p>
-			<Item />
-			<Item />
-		</ItensContainer>
-	);
+function updateList(setItemList, setTotalPrice, setTotalQuantity) {
+	axios
+		.get("http://localhost:5000/cart")
+		.then((res) => {
+			setItemList(res.data);
+
+			let auxForTotal = 0;
+			let auxForQuantity = 0;
+			res.data.forEach((item) => {
+				auxForTotal += item.quantity * item.price;
+				auxForQuantity += Number(item.quantity);
+			});
+			setTotalPrice(auxForTotal);
+			setTotalQuantity(auxForQuantity);
+		})
+		.catch((res) => {
+			alert(res.response.data);
+		});
+}
+
+export default function CartItens({
+	itemList,
+	setItemList,
+	totalPrice,
+	setTotalPrice,
+	totalQuantity,
+	setTotalQuantity,
+}) {
+	useEffect(() => {
+		updateList(setItemList, setTotalPrice, setTotalQuantity);
+	}, []);
+
+	if (itemList.length == 0) {
+		return (
+			<ItensContainer>
+				<h1>Carrinho Vazio</h1>
+			</ItensContainer>
+		);
+	} else
+		return (
+			<ItensContainer>
+				<h1>Seu Carrinho</h1>
+				<p>
+					TOTAL ({totalQuantity} produtos){" " }
+					<span className="bold">
+						R${totalPrice.toFixed(2).replace(".", ",")}
+					</span>
+				</p>
+				{itemList.map(({ _id, name, price, image, quantity }) => {
+					return (
+						<Item
+							key={_id}
+							_id={_id}
+							name={name}
+							price={price}
+							image={image}
+							quantity={quantity}
+							setItemList={setItemList}
+							setTotalPrice={setTotalPrice}
+							setTotalQuantity={setTotalQuantity}
+						/>
+					);
+				})}
+			</ItensContainer>
+		);
 }
 
 const ItensContainer = styled.div`
@@ -33,25 +90,49 @@ const ItensContainer = styled.div`
 	}
 `;
 
-function Item() {
+function Item({
+	_id,
+	name,
+	price,
+	image,
+	quantity,
+	setItemList,
+	setTotalPrice,
+	setTotalQuantity,
+}) {
+	const [quantityShown, setQuantityShown] = useState(quantity);
 	return (
 		<ItemDiv>
-			<img src="https://assets.adidas.com/images/w_280,h_280,f_auto,q_auto:sensitive/154ba20c98a14e94b543ae4b013fd434_9366/HG7787_165_HG7787_01_standard.jpg.jpg?sh=364&strip=false&sw=364" />
+			<img src={image} />
 			<ItemInfo>
 				<div>
-					<p>TOCA PRA COBRIR CARECA</p>
-					<p>TAMANHO M/G</p>
+					<p>{name}</p>
 				</div>
-				<select>
-					<option value="1">1</option>
-					<option value="2">2</option>
-					<option value="3">3</option>
-					<option value="4">4</option>
-					<option value="5">5</option>
+				<select
+					value={quantityShown}
+					onChange={(e) => {
+						axios.put(`http://localhost:5000/cart/${_id}`, {
+							quantity: e.target.value,
+						});
+
+						updateList(setItemList, setTotalPrice, setTotalQuantity);
+
+						setQuantityShown(e.target.value);
+					}}
+				>
+					<option value={1}>1</option>
+					<option value={2}>2</option>
+					<option value={3}>3</option>
+					<option value={4}>4</option>
+					<option value={5}>5</option>
+					<option value={6}>6</option>
+					<option value={7}>7</option>
+					<option value={8}>8</option>
+					<option value={9}>9</option>
 				</select>
 			</ItemInfo>
 			<Price>
-				<p>R$666,66</p>
+				<p>R${(quantityShown * price).toFixed(2).replace(".", ",")}</p>
 			</Price>
 			<Cancel>
 				<img src={xis} alt="cancelar" />
