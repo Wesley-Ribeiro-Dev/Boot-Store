@@ -5,6 +5,7 @@ import useOrder from "../../hooks/useOrder";
 
 export default function CartPayment() {
   const { itemList, totalPrice } = useOrder();
+
   return (
     <CartPaymentContainer>
       <Link to={"/checkout"}>

@@ -6,6 +6,7 @@ import HomePage from "./pages/HomePage";
 import CartPage from "./pages/CartPage/CartPage";
 import { OrderDataProvider } from "./contexts/OrderDataContext";
 import CheckoutPage from "./pages/CheckoutPage";
+import Header from "./components/Header";
 
 export default function App() {
   return (
@@ -13,6 +14,7 @@ export default function App() {
       <UserDataProvider>
         <OrderDataProvider>
           <BrowserRouter>
+          <Header />
             <Routes>
               <Route path="/" element={<SignInPage />} />
               <Route path="/register" element={<SignUpPage />} />

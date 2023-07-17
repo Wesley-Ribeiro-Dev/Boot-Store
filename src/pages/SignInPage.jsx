@@ -43,14 +43,6 @@ export default function SignInPage() {
 
   return (
     <>
-      <Head>
-        <img src={logo} alt="logo" />
-        <div>
-          <p>Quanto maior a testa maior o desconto</p>
-          <p>Acabe com sua calvíce aqui!</p>
-        </div>
-      </Head>
-
       <Form onSubmit={event => {
         event.preventDefault();
         subimitForm()
